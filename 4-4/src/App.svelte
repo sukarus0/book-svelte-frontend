@@ -16,7 +16,7 @@
 
 <br>
 
-<Card>
+<Card let:hovering>
 	<span slot="name">
 		홍길동
 	</span>
@@ -27,7 +27,11 @@
 	</span>
 
 	<span slot="email">
-		myemail@google.com
+		{#if hovering}
+			<b>myemail@google.com</b>
+		{:else}
+			myemail@google.com
+		{/if}
 	</span>
 </Card>
 

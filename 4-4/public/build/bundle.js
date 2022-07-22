@@ -516,7 +516,7 @@ var app = (function () {
     }
 
     // (52:1) {#if $$slots.email}
-    function create_if_block(ctx) {
+    function create_if_block$1(ctx) {
     	let div;
     	let hr;
     	let t;
@@ -578,7 +578,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block.name,
+    		id: create_if_block$1.name,
     		type: "if",
     		source: "(52:1) {#if $$slots.email}",
     		ctx
@@ -602,7 +602,7 @@ var app = (function () {
     	const address_slot_template = /*#slots*/ ctx[5].address;
     	const address_slot = create_slot(address_slot_template, ctx, /*$$scope*/ ctx[4], get_address_slot_context);
     	const address_slot_or_fallback = address_slot || fallback_block_1(ctx);
-    	let if_block = /*$$slots*/ ctx[3].email && create_if_block(ctx);
+    	let if_block = /*$$slots*/ ctx[3].email && create_if_block$1(ctx);
 
     	const block = {
     		c: function create() {
@@ -692,7 +692,7 @@ var app = (function () {
     						transition_in(if_block, 1);
     					}
     				} else {
-    					if_block = create_if_block(ctx);
+    					if_block = create_if_block$1(ctx);
     					if_block.c();
     					transition_in(if_block, 1);
     					if_block.m(article, null);
@@ -872,7 +872,7 @@ var app = (function () {
     			span = element("span");
     			span.textContent = "홍길동";
     			attr_dev(span, "slot", "name");
-    			add_location(span, file, 19, 1, 173);
+    			add_location(span, file, 19, 1, 186);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -907,9 +907,9 @@ var app = (function () {
     			t0 = text("서울특별시");
     			br = element("br");
     			t1 = text("\n\t\t여의도동");
-    			add_location(br, file, 24, 7, 238);
+    			add_location(br, file, 24, 7, 251);
     			attr_dev(span, "slot", "address");
-    			add_location(span, file, 23, 1, 209);
+    			add_location(span, file, 23, 1, 222);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -934,23 +934,99 @@ var app = (function () {
     	return block;
     }
 
+    // (32:2) {:else}
+    function create_else_block(ctx) {
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			t = text("myemail@google.com");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, t, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(t);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block.name,
+    		type: "else",
+    		source: "(32:2) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (30:2) {#if hovering}
+    function create_if_block(ctx) {
+    	let b;
+
+    	const block = {
+    		c: function create() {
+    			b = element("b");
+    			b.textContent = "myemail@google.com";
+    			add_location(b, file, 30, 3, 314);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, b, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(b);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block.name,
+    		type: "if",
+    		source: "(30:2) {#if hovering}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
     // (29:1) 
     function create_email_slot(ctx) {
     	let span;
 
+    	function select_block_type(ctx, dirty) {
+    		if (/*hovering*/ ctx[0]) return create_if_block;
+    		return create_else_block;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block = current_block_type(ctx);
+
     	const block = {
     		c: function create() {
     			span = element("span");
-    			span.textContent = "myemail@google.com";
+    			if_block.c();
     			attr_dev(span, "slot", "email");
-    			add_location(span, file, 28, 1, 261);
+    			add_location(span, file, 28, 1, 274);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
+    			if_block.m(span, null);
     		},
-    		p: noop,
+    		p: function update(ctx, dirty) {
+    			if (current_block_type !== (current_block_type = select_block_type(ctx))) {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(span, null);
+    				}
+    			}
+    		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(span);
+    			if_block.d();
     		}
     	};
 
@@ -987,9 +1063,21 @@ var app = (function () {
     	card1 = new Card({
     			props: {
     				$$slots: {
-    					email: [create_email_slot],
-    					address: [create_address_slot],
-    					name: [create_name_slot]
+    					email: [
+    						create_email_slot,
+    						({ hovering }) => ({ 0: hovering }),
+    						({ hovering }) => hovering ? 1 : 0
+    					],
+    					address: [
+    						create_address_slot,
+    						({ hovering }) => ({ 0: hovering }),
+    						({ hovering }) => hovering ? 1 : 0
+    					],
+    					name: [
+    						create_name_slot,
+    						({ hovering }) => ({ 0: hovering }),
+    						({ hovering }) => hovering ? 1 : 0
+    					]
     				},
     				$$scope: { ctx }
     			},
@@ -1019,14 +1107,14 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			const card0_changes = {};
 
-    			if (dirty & /*$$scope*/ 1) {
+    			if (dirty & /*$$scope*/ 2) {
     				card0_changes.$$scope = { dirty, ctx };
     			}
 
     			card0.$set(card0_changes);
     			const card1_changes = {};
 
-    			if (dirty & /*$$scope*/ 1) {
+    			if (dirty & /*$$scope, hovering*/ 3) {
     				card1_changes.$$scope = { dirty, ctx };
     			}
 

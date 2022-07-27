@@ -28,6 +28,8 @@
 		},
 	]
 
+	let todoValue = '';
+
 	function handleCheckTodo(id) {
 		todos = todos.map(todo => {
 			if(todo.id === id) {
@@ -36,10 +38,31 @@
 			return todo;
 		})
 	}
+
+	function addTodoItem() {
+		if(todoValue) {
+			const newTodo = {
+				id: uuid(),
+				content: todoValue,
+				done: false,
+			}
+
+			todos = [...todos, newTodo];
+			todoValue = '';
+		}
+	}
+
+	function handleTodoInputKeyup(e) {
+		if(e.keyCode == 13) {
+			console.log('todoValue: ${e.target.value}')
+
+			addTodoItem();
+		}
+	}
 </script>
 
 <div class='app'>
-	<TodoHeader />
+	<TodoHeader bind:todoValue={todoValue} {handleTodoInputKeyup} />
 	<TodoInfo />
 	<TodoList {todos} {handleCheckTodo} />
 </div>

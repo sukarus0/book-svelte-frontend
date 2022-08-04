@@ -674,39 +674,42 @@ var app = (function () {
     function create_fragment$3(ctx) {
     	let div1;
     	let span;
+    	let t0;
     	let t1;
+    	let t2;
     	let div0;
     	let button0;
-    	let t3;
+    	let t4;
     	let button1;
-    	let t5;
+    	let t6;
     	let button2;
 
     	const block = {
     		c: function create() {
     			div1 = element("div");
     			span = element("span");
-    			span.textContent = "COUNT: 0";
-    			t1 = space();
+    			t0 = text("COUNT: ");
+    			t1 = text(/*todoCount*/ ctx[0]);
+    			t2 = space();
     			div0 = element("div");
     			button0 = element("button");
     			button0.textContent = "ALL";
-    			t3 = space();
+    			t4 = space();
     			button1 = element("button");
     			button1.textContent = "ACTIVE";
-    			t5 = space();
+    			t6 = space();
     			button2 = element("button");
     			button2.textContent = "DONE";
-    			add_location(span, file$3, 1, 1, 20);
+    			add_location(span, file$3, 5, 1, 63);
     			attr_dev(button0, "class", "btn");
-    			add_location(button0, file$3, 3, 2, 51);
+    			add_location(button0, file$3, 7, 2, 105);
     			attr_dev(button1, "class", "btn");
-    			add_location(button1, file$3, 4, 2, 88);
+    			add_location(button1, file$3, 8, 2, 142);
     			attr_dev(button2, "class", "btn");
-    			add_location(button2, file$3, 5, 2, 128);
-    			add_location(div0, file$3, 2, 1, 43);
+    			add_location(button2, file$3, 9, 2, 182);
+    			add_location(div0, file$3, 6, 1, 97);
     			attr_dev(div1, "class", "info");
-    			add_location(div1, file$3, 0, 0, 0);
+    			add_location(div1, file$3, 4, 0, 43);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -714,15 +717,19 @@ var app = (function () {
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
     			append_dev(div1, span);
-    			append_dev(div1, t1);
+    			append_dev(span, t0);
+    			append_dev(span, t1);
+    			append_dev(div1, t2);
     			append_dev(div1, div0);
     			append_dev(div0, button0);
-    			append_dev(div0, t3);
+    			append_dev(div0, t4);
     			append_dev(div0, button1);
-    			append_dev(div0, t5);
+    			append_dev(div0, t6);
     			append_dev(div0, button2);
     		},
-    		p: noop,
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*todoCount*/ 1) set_data_dev(t1, /*todoCount*/ ctx[0]);
+    		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
@@ -741,22 +748,37 @@ var app = (function () {
     	return block;
     }
 
-    function instance$3($$self, $$props) {
+    function instance$3($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('TodoInfo', slots, []);
-    	const writable_props = [];
+    	let { todoCount } = $$props;
+    	const writable_props = ['todoCount'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<TodoInfo> was created with unknown prop '${key}'`);
     	});
 
-    	return [];
+    	$$self.$$set = $$props => {
+    		if ('todoCount' in $$props) $$invalidate(0, todoCount = $$props.todoCount);
+    	};
+
+    	$$self.$capture_state = () => ({ todoCount });
+
+    	$$self.$inject_state = $$props => {
+    		if ('todoCount' in $$props) $$invalidate(0, todoCount = $$props.todoCount);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [todoCount];
     }
 
     class TodoInfo extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$3, create_fragment$3, safe_not_equal, {});
+    		init(this, options, instance$3, create_fragment$3, safe_not_equal, { todoCount: 0 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -764,6 +786,21 @@ var app = (function () {
     			options,
     			id: create_fragment$3.name
     		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
+
+    		if (/*todoCount*/ ctx[0] === undefined && !('todoCount' in props)) {
+    			console.warn("<TodoInfo> was created without expected prop 'todoCount'");
+    		}
+    	}
+
+    	get todoCount() {
+    		throw new Error("<TodoInfo>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set todoCount(value) {
+    		throw new Error("<TodoInfo>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
 
@@ -1603,11 +1640,11 @@ var app = (function () {
     	let current;
 
     	function todoheader_todoValue_binding(value) {
-    		/*todoheader_todoValue_binding*/ ctx[9](value);
+    		/*todoheader_todoValue_binding*/ ctx[10](value);
     	}
 
     	let todoheader_props = {
-    		handleTodoInputKeyup: /*handleTodoInputKeyup*/ ctx[4]
+    		handleTodoInputKeyup: /*handleTodoInputKeyup*/ ctx[5]
     	};
 
     	if (/*todoValue*/ ctx[1] !== void 0) {
@@ -1616,17 +1653,21 @@ var app = (function () {
 
     	todoheader = new TodoHeader({ props: todoheader_props, $$inline: true });
     	binding_callbacks.push(() => bind(todoheader, 'todoValue', todoheader_todoValue_binding));
-    	todoinfo = new TodoInfo({ $$inline: true });
+
+    	todoinfo = new TodoInfo({
+    			props: { todoCount: /*todoCount*/ ctx[3] },
+    			$$inline: true
+    		});
 
     	todolist = new TodoList({
     			props: {
     				todos: /*todos*/ ctx[0],
-    				handleCheckTodo: /*handleCheckTodo*/ ctx[3],
-    				handleRemoveTodo: /*handleRemoveTodo*/ ctx[5],
+    				handleCheckTodo: /*handleCheckTodo*/ ctx[4],
+    				handleRemoveTodo: /*handleRemoveTodo*/ ctx[6],
     				editMode: /*editMode*/ ctx[2],
-    				handleChangeEditMode: /*handleChangeEditMode*/ ctx[6],
-    				handleEditTodoItem: /*handleEditTodoItem*/ ctx[7],
-    				handleEditTodoItemByEnter: /*handleEditTodoItemByEnter*/ ctx[8]
+    				handleChangeEditMode: /*handleChangeEditMode*/ ctx[7],
+    				handleEditTodoItem: /*handleEditTodoItem*/ ctx[8],
+    				handleEditTodoItemByEnter: /*handleEditTodoItemByEnter*/ ctx[9]
     			},
     			$$inline: true
     		});
@@ -1640,7 +1681,7 @@ var app = (function () {
     			t1 = space();
     			create_component(todolist.$$.fragment);
     			attr_dev(div, "class", "app");
-    			add_location(div, file, 95, 0, 1498);
+    			add_location(div, file, 97, 0, 1529);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1664,6 +1705,9 @@ var app = (function () {
     			}
 
     			todoheader.$set(todoheader_changes);
+    			const todoinfo_changes = {};
+    			if (dirty & /*todoCount*/ 8) todoinfo_changes.todoCount = /*todoCount*/ ctx[3];
+    			todoinfo.$set(todoinfo_changes);
     			const todolist_changes = {};
     			if (dirty & /*todos*/ 1) todolist_changes.todos = /*todos*/ ctx[0];
     			if (dirty & /*editMode*/ 4) todolist_changes.editMode = /*editMode*/ ctx[2];
@@ -1702,6 +1746,7 @@ var app = (function () {
     }
 
     function instance($$self, $$props, $$invalidate) {
+    	let todoCount;
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
 
@@ -1817,23 +1862,32 @@ var app = (function () {
     		handleChangeEditMode,
     		closeEditMode,
     		handleEditTodoItem,
-    		handleEditTodoItemByEnter
+    		handleEditTodoItemByEnter,
+    		todoCount
     	});
 
     	$$self.$inject_state = $$props => {
     		if ('todos' in $$props) $$invalidate(0, todos = $$props.todos);
     		if ('todoValue' in $$props) $$invalidate(1, todoValue = $$props.todoValue);
     		if ('editMode' in $$props) $$invalidate(2, editMode = $$props.editMode);
+    		if ('todoCount' in $$props) $$invalidate(3, todoCount = $$props.todoCount);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*todos*/ 1) {
+    			$$invalidate(3, todoCount = todos.length);
+    		}
+    	};
+
     	return [
     		todos,
     		todoValue,
     		editMode,
+    		todoCount,
     		handleCheckTodo,
     		handleTodoInputKeyup,
     		handleRemoveTodo,

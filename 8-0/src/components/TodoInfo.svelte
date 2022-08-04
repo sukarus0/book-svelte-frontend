@@ -1,5 +1,9 @@
+<script>
+	export let todoCount;
+</script>
+
 <div class='info'>
-	<span>COUNT: 0</span>
+	<span>COUNT: {todoCount} </span>
 	<div>
 		<button class='btn'> ALL </button>
 		<button class='btn'> ACTIVE </button>

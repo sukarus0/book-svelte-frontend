@@ -1,4 +1,6 @@
 <script>
+	import Constant from './constant';
+	
 	import TodoHeader from './components/TodoHeader.svelte';
 	import TodoInfo from './components/TodoInfo.svelte';
 	import TodoList from './components/TodoList.svelte';
@@ -30,8 +32,16 @@
 
 	let todoValue = '';
 	let editMode = '';
+	let viewMode = '';
 
-	$: todoCount = todos.length;
+	$: todoCount = fetchTodos.length;
+	$: fetchTodos = todos;
+
+	$: {
+		if(viewMode === Constant.ALL) fetchTodos = todos;
+		if(viewMode === Constant.ACTIVE) fetchTodos = todos.filter(todo => todo.done === false);
+		if(viewMode === Constant.DONE) fetchTodos = todos.filter(todo => todo.done === true);
+	}
 
 	function handleCheckTodo(id) {
 		todos = todos.map(todo => {
@@ -93,13 +103,18 @@
 		}
 	}
 
+	function handleChangeViewMode(mode) {
+		viewMode = mode;
+	}
+
 </script>
 
 <div class='app'>
 	<TodoHeader bind:todoValue={todoValue} {handleTodoInputKeyup} />
-	<TodoInfo {todoCount} />
+	<TodoInfo {todoCount} {viewMode} {handleChangeViewMode}/>
 	<TodoList 
 		{todos} 
+		{fetchTodos}
 		{handleCheckTodo} 
 		{handleRemoveTodo} 
 		{editMode} 

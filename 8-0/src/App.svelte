@@ -29,6 +29,7 @@
 	]
 
 	let todoValue = '';
+	let editMode = '';
 
 	function handleCheckTodo(id) {
 		todos = todos.map(todo => {
@@ -63,12 +64,47 @@
 	function handleRemoveTodo(id) {
 		todos = todos.filter(todo => todo.id != id);
 	}
+
+
+	function handleChangeEditMode(id) {
+		editMode = id;
+	}
+
+	function closeEditMode() {
+		editMode = '';
+	}
+
+	function handleEditTodoItem(editTodo) {
+		todos = todos.map(todo => {
+			if(todo.id === editTodo.id) {
+				todo.content = editTodo.content;
+			}
+			return todo;
+		})
+
+		closeEditMode();
+	}
+
+	function handleEditTodoItemByEnter(e, editTodo) {
+		if(e.keyCode === 13) {
+			handleEditTodoItem(editTodo);
+		}
+	}
+
 </script>
 
 <div class='app'>
 	<TodoHeader bind:todoValue={todoValue} {handleTodoInputKeyup} />
 	<TodoInfo />
-	<TodoList {todos} {handleCheckTodo} {handleRemoveTodo} />
+	<TodoList 
+		{todos} 
+		{handleCheckTodo} 
+		{handleRemoveTodo} 
+		{editMode} 
+		{handleChangeEditMode} 
+		{handleEditTodoItem} 
+		{handleEditTodoItemByEnter} 
+	/>
 </div>
 
 <style>

@@ -1,27 +1,29 @@
 <script>
-	export let todo;
-	export let handleCheckTodo;
-	export let handleRemoveTodo;
+	import { todos } from '../store';
 
-	export let editMode;
-	export let handleEditTodoItem;
-	export let handleEditTodoItemByEnter;
-	export let handleChangeEditMode;
+	export let todo;
+
+	const handleCheckTodo = () => todos.checkTodo(todo.id);
+	const handleChangeTodoEditMode = () => todos.changeTodoEditMode(todo.id);
+	const handleEditTodo = () => {
+		todos.editTodo(todo);
+		todos.closeTodoEditMode();
+	}
+	const handleRemoveTodo = () => todos.removeTodo(todo.id);
 </script>
 
 <input 
 	type='checkbox'
 	bind:checked={todo.done}
-	on:click={() => handleCheckTodo(todo.id)}
+	on:click={() => handleCheckTodo}
 >
-{#if editMode === todo.id}
+{#if $todos.editMode === todo.id}
 	<input 
 		type='text' 
 		bind:value={todo.content}
-		on:focusout={() => handleEditTodoItem(todo)} 
-		on:keyup={(e) => handleEditTodoItemByEnter(e, todo)}
+		on:focusout={() => handleEditTodo} 
 	/>
 {:else}
-	<span on:dblclick={() => handleChangeEditMode(todo.id)}>{todo.content}</span>
+	<span on:dblclick={ handleChangeTodoEditMode}>{todo.content}</span>
 {/if}
-<a href='#null' on:click={() => handleRemoveTodo(todo.id)}>X</a>
+<a href='#null' on:click={ handleRemoveTodo }>X</a>

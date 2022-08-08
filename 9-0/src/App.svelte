@@ -1,16 +1,12 @@
 <script>
-	import { Route } from 'tinro';
+	import Router from './router.svelte'
+	import Nav from './components/Nav.svelte'
 </script>
 
-<nav>
-	<a href='/'> HOME </a>
-	<a href='/about'> ABOUT </a>
-	<a href='/contacts'> CONTACTS </a>
-</nav>
 
-<Route path='/'><h1>Home Page</h1></Route>
-<Route path='/about'><h1>About Page</h1></Route>
-<Route path='/contacts'><h1>Contacts Page</h1></Route>
+<Nav />
+<Router />
+
 
 <style>
 </style>

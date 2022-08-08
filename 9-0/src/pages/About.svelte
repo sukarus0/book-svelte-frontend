@@ -1,4 +1,16 @@
-<h1>About Page</h1>
-<a href='/about/sub/'> Sub </a>
+<script>
+	import { Route } from 'tinro';
+	import SubContent from './SubContent.svelte';
+</script>
 
-<hr />
+<div class='main'>
+	<h1>About Page</h1>
+	
+	<a href='/about/sub/123'> Sub </a>
+	<hr />
+
+	<Route path='/sub/:_id'>
+		<SubContent />
+	</Route>
+	<hr />
+</div>

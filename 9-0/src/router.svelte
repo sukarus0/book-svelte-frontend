@@ -5,6 +5,9 @@
 	import Contacts from './pages/Contacts.svelte';
 </script>
 
-<Route path='/'><Home /></Route>
+<Route path='/' redirect='/home'></Route>
+<Route path='/home'><Home /></Route>
 <Route path='/about'><About /></Route>
 <Route path='/contacts'><Contacts /></Route>
+
+<Route fallback> 404 페이지 </Route>
